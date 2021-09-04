@@ -1,6 +1,9 @@
 const express=require("express");
+
 const bodyParser=require("body-parser");
 const { ifError } = require("assert");
+var PORT=process.env.PORT || 5000;
+
 const app=express();
 const fs=require('fs');
 //var PORT=process.env.PORT || 5000;
@@ -10,6 +13,6 @@ app.get("/",function(req,res){
     res.sendFile(__dirname+"/index.html");
 })
 
-app.listen(3000,function(req,res){
+app.listen(PORT,function(req,res){
     console.log("Server has started on port");
 })
