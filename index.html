@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>CV_Maker By QuestCease</title>
+        <style>
+            #github-api{
+                position: absolute;
+                width: 400px;
+                height: 400px;
+                box-shadow: rgb(5, 5, 5) 3px 4px 8px;
+                text-align: center;
+                left: 37vw;
+                background-image: url(https://img.freepik.com/free-vector/hand-painted-nature-background_23-2148940793.jpg?size=626&ext=jpg);
+                background-size: cover;
+            }
+            #append{
+                width: 75vw;
+                margin-left: 10vw;
+                box-shadow: rgb(190, 22, 22) 3px 4px 8px;                
+            }
+           
+            @media screen and (max-width: 866px){
+                #github-api{
+                    left: 25vw;
+                }
+              
+                .hii{
+                    margin-left: 10vw;
+                    font-size: 0.3em;
+                }
+            }
+             @media screen and (max-width: 610px){
+                #github-api{
+                    left: 3%;
+                }
+                #append{
+                    width: 610px;
+                    margin-left: 0%;
+                }
+                .hii{
+                    margin-left: 10vw;
+                    font-size: 0.3em;
+                }
+            }
+             @media screen and (max-width: 430px){
+                #github-api{
+                    left: 0%;
+                }
+                #append{
+                    width: 610px;
+                    margin-left: 0%;
+                }
+                .hii{
+                    margin-left: 10vw;
+                    font-size: 0.3em;
+                }
+            }
+        </style>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+   </head>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+    <body>
+        <br><br>
+        <form class="text-center mb-2 mt-5" id="github-api">
+            <h1 id="type">CV Maker</h1><br><br>
+            <div>
+                <input id="username" type="text" name="usn" placeholder="Enter your Github username">
+                <button class="btn btn-success" type="submit" value="submit">Submit</button>
+            </div>
+        </form>
+        <h2 class="text-center" style="margin-top: 460px;">Your Resume will appear here ðŸ‘‡</h2>
+        <br><br>
+        <div id="append">
+            <div style="height: 250px;">
+                <h2 id="name" style="text-align: center;"></h2>
+                <h4  ><span id="pic"></span> </h4>
+                <h4 id="details" style="text-align: end;"></h4>
+            </div>
+            <br><br>
+            <h4 style="margin-left: 10vw;" id="biodat"></h4>
+            <br>
+            <h2 id="project"></h2>
+            <ul style="margin-left: 10vw;" id="work"></ul>
+        </div>
+        <button class="btn btn-primary" style="position:absolute; left: 45vw;"  onclick="download()">Download</button>
+    </body>
+
+    <script >
+    const gitHubForm = document.getElementById('github-api');
+
+// Listen for submissions on GitHub username input form
+    gitHubForm.addEventListener('submit', (e) => {
+    
+    // Prevent default form submission action
+    e.preventDefault();
+
+    // Get the GitHub username input field on the DOM
+    let usernameInput = document.getElementById('username');
+
+    // Get the value of the GitHub username input field
+    let gitHubUsername = usernameInput.value;          
+
+    // Run GitHub API function, passing in the GitHub username
+    requestUserRepos(gitHubUsername);
+
+})
+function requestUserRepos(username){
+    
+    // Create new XMLHttpRequest object
+    const xhr = new XMLHttpRequest();
+    const lmn=new XMLHttpRequest();
+
+    // GitHub endpoint, dynamically passing in specified username
+    const url = `https://api.github.com/users/${username}`;
+    const link=`https://api.github.com/users/${username}/repos`;
+    // Open a new connection, using a GET request via URL endpoint
+    // Providing 3 arguments (GET/POST, The URL, Async True/False)
+    xhr.open('GET', url, true);
+    lmn.open('GET',link,true);
+    // When request is received
+    // Process it here
+    xhr.onload = function () {
+    
+        // Parse API data into JSON
+        const data = JSON.parse(this.response);
+        
+        // Loop over each object in data array
+       {
+
+            // Get the ul with id of of userRepos
+            
+    
+            // Create variable that will create li's to be added to ul
+            
+            
+            // Add Bootstrap list item class to each li
+            let ins=document.getElementById('pic');
+            let pict=document.createElement('div');
+            let bio=document.getElementById('biodat');
+            let sinc1=document.createElement('span');
+            sinc1.innerHTML=(`
+            <h2 style="text-decoration:underline overline red;">About</h2>
+            <h4 style="">${data.bio}</h4>
+        `   );
+            // Create the html markup for each li
+            pict.innerHTML = (`
+                <div style="position:absolute;background-color: aqua;height:200px;width:75vw;left:10vw;" >
+                    <h2 style="background-color: grey;text-align:center;">${data.name}</h2>
+                    <img src="https://avatars.githubusercontent.com/${username}" style="position:absolute;width:200px;height:200px;background-color: aqua;left:5%;">
+                    <h4 class="hii" style="margin-left:40vw">Email:${data.email}</h4>
+                    <h4 class="hii" style="margin-left:40vw">Location:${data.location}</h4>
+                </div>
+            `);
+    
+            
+            // Append each li to the ul
+            ins.appendChild(pict);
+            bio.appendChild(sinc1);
+        
+        }
+
+    }
+    xhr.send();
+    
+    lmn.onload=function(){
+        const data1 = JSON.parse(this.response);
+        let project=document.getElementById('project');
+        let sinc=document.createElement('span');
+ 
+
+        
+        sinc.innerHTML=(`
+            <h2 style="margin-left:10vw;text-decoration:underline overline red;">Projects</h2>
+        `);
+        project.appendChild(sinc);
+
+        for(let j in data1){
+            let div = document.getElementById('work');
+            let li = document.createElement('li');
+
+             li.innerHTML = (`
+                
+                <h4>âš«<strong> ${data1[j].name}</strong></h4>
+                <p><a href="${data1[j].html_url}">${data1[j].html_url}</a></p>
+            `);
+
+            div.appendChild(li);
+        }
+    }
+    lmn.send();
+}
+function download() {
+            var a = document.body.appendChild(
+               document.createElement("a")
+            );
+           a.download = "newfile.html";
+           a.href = "data:text/html," + document.getElementById("append").innerHTML;
+           a.click(); //Trigger a click on the element
+        }        
+
+    </script>
+
+</html>
